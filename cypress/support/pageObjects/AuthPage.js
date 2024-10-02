@@ -41,7 +41,7 @@ class AuthPage {
         });
     }
 
-    // API method for user registration
+    // API method for user registration without policy agreement
     register2(firstName, lastName, email, password) {
         return this.getRegisterToken().then((registerToken) => {
             return cy.request({
