@@ -52,21 +52,25 @@ jobs:
       - name: Check for mochawesome reports
         run: |
           echo "Checking for report files..."
-          ls -l cypress/reports/*.json || echo "No JSON reports found."
-          if [ -z "$(ls -A cypress/reports/*.json 2>/dev/null)" ]; then
-            echo "No JSON reports found, skipping merge."
+          if ls cypress/reports/*.json 1> /dev/null 2>&1; then
+            echo "JSON report files found:"
+            ls -l cypress/reports/*.json
+          else
+            echo "No JSON reports found."
             exit 0
           fi
 
       # Merge test results into one report using mochawesome-merge
       - name: Merge Cypress test results
         run: |
+          echo "Merging reports..."
           npx mochawesome-merge cypress/reports/*.json > cypress/reports/mochawesome.json || true
-          # Only attempt to create an HTML report if the JSON report exists
-          if [ -f cypress/reports/mochawesome.json ]; then
+          # Check if the merged JSON file exists and is not empty
+          if [ -s cypress/reports/mochawesome.json ]; then
+            echo "Merged report generated successfully."
             npx marge cypress/reports/mochawesome.json --reportDir cypress/reports --inline
           else
-            echo "No valid JSON report to merge."
+            echo "Merged report is empty or failed to generate."
           fi
 
       # Send email with test report
