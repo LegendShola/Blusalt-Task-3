@@ -55,6 +55,7 @@ jobs:
           if ls cypress/reports/*.json 1> /dev/null 2>&1; then
             echo "JSON report files found:"
             ls -l cypress/reports/*.json
+            cat cypress/reports/*.json  # Print contents of report files
           else
             echo "No JSON reports found."
             exit 0
@@ -67,6 +68,7 @@ jobs:
           if [ -n "$(ls -A cypress/reports/*.json 2>/dev/null)" ]; then
             npx mochawesome-merge cypress/reports/*.json > cypress/reports/mochawesome.json || true
             if [ -s cypress/reports/mochawesome.json ]; then
+              echo "Merging successful."
               npx marge cypress/reports/mochawesome.json --reportDir cypress/reports --inline
             else
               echo "Merged report is empty or failed to generate."
@@ -77,7 +79,6 @@ jobs:
             exit 0
           fi
 
-
       # Verify attachment exists
       - name: Check for attachment
         run: |
@@ -87,7 +88,6 @@ jobs:
             echo "Attachment not found."
             exit 1
           fi
-  
 
       # Send email with test report
       - name: Send email notification
