@@ -4,12 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "cypress": "cypress open"
+    "cypress:open": "cypress open",
+    "test": "cypress run --reporter mochawesome --reporter-options reportDir=cypress/results,overwrite=false,html=false,json=true",
+    "merge:reports": "mochawesome-merge cypress/results/*.json > mochawesome.json && mochawesome-report-generator mochawesome.json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "cypress": "^13.15.0"
+  },
+  "dependencies": {
+    "blusalt-task-3": "file:"
   }
 }
