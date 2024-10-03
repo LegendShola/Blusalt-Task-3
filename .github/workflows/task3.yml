@@ -64,14 +64,19 @@ jobs:
       - name: Merge Cypress test results
         run: |
           echo "Merging reports..."
-          npx mochawesome-merge cypress/reports/*.json > cypress/reports/mochawesome.json || true
-          # Check if the merged JSON file exists and is not empty
-          if [ -s cypress/reports/mochawesome.json ]; then
-            echo "Merged report generated successfully."
-            npx marge cypress/reports/mochawesome.json --reportDir cypress/reports --inline
+          if [ -n "$(ls -A cypress/reports/*.json 2>/dev/null)" ]; then
+            npx mochawesome-merge cypress/reports/*.json > cypress/reports/mochawesome.json || true
+            if [ -s cypress/reports/mochawesome.json ]; then
+              npx marge cypress/reports/mochawesome.json --reportDir cypress/reports --inline
+            else
+              echo "Merged report is empty or failed to generate."
+              exit 1
+            fi
           else
-            echo "Merged report is empty or failed to generate."
+            echo "No JSON reports found to merge."
+            exit 0
           fi
+
 
       # Verify attachment exists
       - name: Check for attachment
