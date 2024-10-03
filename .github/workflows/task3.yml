@@ -44,3 +44,24 @@ jobs:
         run: |
           sudo apt-get install -y xvfb
           xvfb-run --auto-servernum --server-args="-screen 0 1280x1024x24" npx cypress run
+
+      # Merge test results into one report using mochawesome-merge
+      - name: Merge Cypress test results
+        run: |
+          npx mochawesome-merge cypress/reports/*.json > cypress/reports/mochawesome.json
+          npx marge cypress/reports/mochawesome.json --reportDir cypress/reports --inline
+
+      # Send email with test report
+      - name: Send email notification
+        if: always()  # Ensure that the email is sent regardless of success or failure
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Cypress Test Report for ${{ github.repository }}
+          body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
+          to: shola.olagbemisoye@wemabank.com  # Change this to the recipient email
+          from: shola.mich.7438@gmail.com   # Change this to the sender email
+          attachments: cypress/reports/mochawesome.html
