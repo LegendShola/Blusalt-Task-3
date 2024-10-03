@@ -42,17 +42,17 @@ jobs:
       - name: Create reports directory
         run: mkdir -p cypress/reports  
 
-      # Use xvfb to enable a headless GUI for Cypress tests, and ensure the step doesn't fail on test failures
+      # Use xvfb to enable a headless GUI for Cypress tests
       - name: Run Cypress tests with XVFB
         run: |
           sudo apt-get install -y xvfb
           xvfb-run --auto-servernum --server-args="-screen 0 1280x1024x24" npx cypress run || true
 
-      # Check for mochawesome reports and skip merge if none are found
+      # Check for mochawesome reports
       - name: Check for mochawesome reports
         run: |
           echo "Checking for report files..."
-          ls -l cypress/reports/*.json || echo "No JSON reports found, skipping merge."
+          ls -l cypress/reports/*.json || echo "No JSON reports found."
           if [ -z "$(ls -A cypress/reports/*.json 2>/dev/null)" ]; then
             echo "No JSON reports found, skipping merge."
             exit 0
@@ -61,8 +61,13 @@ jobs:
       # Merge test results into one report using mochawesome-merge
       - name: Merge Cypress test results
         run: |
-          npx mochawesome-merge cypress/reports/*.json > cypress/reports/mochawesome.json
-          npx marge cypress/reports/mochawesome.json --reportDir cypress/reports --inline
+          npx mochawesome-merge cypress/reports/*.json > cypress/reports/mochawesome.json || true
+          # Only attempt to create an HTML report if the JSON report exists
+          if [ -f cypress/reports/mochawesome.json ]; then
+            npx marge cypress/reports/mochawesome.json --reportDir cypress/reports --inline
+          else
+            echo "No valid JSON report to merge."
+          fi
 
       # Send email with test report
       - name: Send email notification
