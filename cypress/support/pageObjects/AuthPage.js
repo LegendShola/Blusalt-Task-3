@@ -8,7 +8,7 @@ class AuthPage {
             method: 'GET',
             url: 'https://demo.opencart.com/index.php?route=account/register',
         }).then((response) => {
-            // Parse the response to extract the token from the response body or URL
+            // Parse the response to extract the token from the response body
             const token = /register_token=([\w\d]+)/.exec(response.body)[1];
             return token; // Return the extracted register token
         });
