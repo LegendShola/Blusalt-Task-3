@@ -24,5 +24,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Install Cypress
+        run: npm install cypress --save-dev
+
+      - name: Give Cypress permission to execute
+        run: npx cypress install
+
       - name: Run Cypress tests
         run: npx cypress run
