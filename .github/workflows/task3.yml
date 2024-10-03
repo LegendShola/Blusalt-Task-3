@@ -39,8 +39,8 @@ jobs:
       - name: Install Cypress with elevated permissions
         run: sudo npx cypress install
 
-      # - name: Create reports directory
-      #   run: mkdir -p cypress/reports  
+      - name: Create reports directory
+        run: mkdir -p cypress/reports  
 
       # Use xvfb to enable a headless GUI for Cypress tests, and ensure the step doesn't fail on test failures
       - name: Run Cypress tests with XVFB
@@ -51,6 +51,8 @@ jobs:
       # Check for mochawesome reports and skip merge if none are found
       - name: Check for mochawesome reports
         run: |
+          echo "Checking for report files..."
+          ls -l cypress/reports/*.json || echo "No JSON reports found, skipping merge."
           if [ -z "$(ls -A cypress/reports/*.json 2>/dev/null)" ]; then
             echo "No JSON reports found, skipping merge."
             exit 0
@@ -74,5 +76,5 @@ jobs:
           subject: Cypress Test Report for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
           to: shola.olagbemisoye@wemabank.com  # Change this to the recipient email
-          from: shola.mich.7438@gmail.com   # Change this to the sender emai
+          from: shola.mich.7438@gmail.com   # Change this to the sender email
           attachments: cypress/reports/mochawesome.html
