@@ -74,5 +74,5 @@ jobs:
           subject: Cypress Test Report for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
           to: shola.olagbemisoye@wemabank.com  # Change this to the recipient email
-          from: shola.mich.7438@gmail.com   # Change this to the sender email
+          from: shola.mich.7438@gmail.com   # Change this to the sender emai
           attachments: cypress/reports/mochawesome.html
