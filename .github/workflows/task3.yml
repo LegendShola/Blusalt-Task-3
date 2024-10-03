@@ -73,9 +73,20 @@ jobs:
             echo "Merged report is empty or failed to generate."
           fi
 
+      # Verify attachment exists
+      - name: Check for attachment
+        run: |
+          if [ -f cypress/reports/mochawesome.html ]; then
+            echo "Attachment found."
+          else
+            echo "Attachment not found."
+            exit 1
+          fi
+  
+
       # Send email with test report
       - name: Send email notification
-        if: always()  # Ensure that the email is sent regardless of success or failure
+        if: always()
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -84,6 +95,10 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: Cypress Test Report for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
-          to: oluwashola.olagbemisoye@mtn.com, shola.olagbemisoye@wemabank.com, olushola@ebsafr.com, olawunmitolulope6@gmail.com  # Change this to the recipient email
+          to: |
+            oluwashola.olagbemisoye@mtn.com, 
+            shola.olagbemisoye@wemabank.com, 
+            olushola@ebsafr.com, 
+            olawunmitolulope6@gmail.com
           from: shola.mich.7438@gmail.com   # Change this to the sender email
           attachments: cypress/reports/mochawesome.html
