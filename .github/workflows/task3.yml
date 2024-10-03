@@ -39,8 +39,8 @@ jobs:
       - name: Install Cypress with elevated permissions
         run: sudo npx cypress install
 
-      - name: Create reports directory
-        run: mkdir -p cypress/reports  
+      # - name: Create reports directory
+      #   run: mkdir -p cypress/reports  
 
       # Use xvfb to enable a headless GUI for Cypress tests, and ensure the step doesn't fail on test failures
       - name: Run Cypress tests with XVFB
