@@ -7,4 +7,11 @@ module.exports = defineConfig({
     },
     specPattern: 'cypress/integration/**/*spec.js',
   },
+  reporter: 'mochawesome',
+  reporterOptions: {
+    reportDir: 'cypress/reports',
+    overwrite: false,
+    html: false,
+    json: true,
+  },
 });
