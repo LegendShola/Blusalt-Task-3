@@ -39,7 +39,7 @@ jobs:
         run: sudo npx cypress install
 
       - name: Create reports directory
-        run: mkdir -p cypress/reports  
+        run: mkdir -p cypress/reports/junit  # Ensure correct sub-directory for reports
 
       - name: Run Cypress tests
         run: |
@@ -49,9 +49,9 @@ jobs:
       - name: Check for JUnit reports
         run: |
           echo "Checking for JUnit report files..."
-          if ls cypress/reports/junit/*.xml 1> /dev/null 2>&1; then
+          if ls cypress/reports/junit/results.xml 1> /dev/null 2>&1; then
             echo "JUnit report files found:"
-            ls -l cypress/reports/junit/*.xml
+            ls -l cypress/reports/junit/results.xml
           else
             echo "No JUnit reports found."
             exit 0
@@ -73,4 +73,4 @@ jobs:
             olushola@ebsafr.com, 
             olawunmitolulope6@gmail.com
           from: shola.mich.7438@gmail.com
-          attachments: cypress/reports/junit/results-[hash].xml
+          attachments: cypress/reports/junit/results.xml  # Attach the specific results file

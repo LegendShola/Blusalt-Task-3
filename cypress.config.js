@@ -13,7 +13,7 @@ module.exports = defineConfig({
   },
   reporter: 'junit',  // Using JUnit reporter for CI reporting
   reporterOptions: {
-    mochaFile: 'cypress/reports/junit/results-[hash].xml',
+    mochaFile: 'cypress/reports/junit/results.xml',  // Use a specific file name for clarity
     toConsole: true,
   },
 });
