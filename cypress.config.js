@@ -11,9 +11,11 @@ module.exports = defineConfig({
     responseTimeout: 60000, // Increase the response timeout to 60 seconds
     pageLoadTimeout: 120000, // Increase page load timeout to 120 seconds
   },
-  reporter: 'junit',  // Using JUnit reporter for CI reporting
+  reporter: 'mochawesome',  // Use Mocha Awesome reporter
   reporterOptions: {
-    mochaFile: 'cypress/reports/junit/results.xml',  // Use a specific file name for clarity
-    toConsole: true,
+    reportDir: 'cypress/reports/mochawesome',  // Directory for mochawesome reports
+    overwrite: false,
+    html: true,
+    json: true,
   },
 });

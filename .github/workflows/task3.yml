@@ -39,21 +39,21 @@ jobs:
         run: sudo npx cypress install
 
       - name: Create reports directory
-        run: mkdir -p cypress/reports/junit  # Ensure correct sub-directory for reports
+        run: mkdir -p cypress/reports/mochawesome  # Update for mochawesome reports
 
       - name: Run Cypress tests
         run: |
           sudo apt-get install -y xvfb
           xvfb-run --auto-servernum --server-args="-screen 0 1280x1024x24" npx cypress run || true
 
-      - name: Check for JUnit reports
+      - name: Check for MochaAwesome reports
         run: |
-          echo "Checking for JUnit report files..."
-          if ls cypress/reports/junit/results.xml 1> /dev/null 2>&1; then
-            echo "JUnit report files found:"
-            ls -l cypress/reports/junit/results.xml
+          echo "Checking for MochaAwesome report files..."
+          if ls cypress/reports/mochawesome/*.html 1> /dev/null 2>&1; then
+            echo "MochaAwesome report files found:"
+            ls -l cypress/reports/mochawesome/*.html
           else
-            echo "No JUnit reports found."
+            echo "No MochaAwesome reports found."
             exit 0
           fi
 
@@ -65,7 +65,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Cypress JUnit Test Report for ${{ github.repository }}
+          subject: Cypress Test Report(MochaAwesome) for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
           to: |
             oluwashola.olagbemisoye@mtn.com, 
@@ -73,4 +73,4 @@ jobs:
             olushola@ebsafr.com, 
             olawunmitolulope6@gmail.com
           from: shola.mich.7438@gmail.com
-          attachments: cypress/reports/junit/results.xml  # Attach the specific results file
+          attachments: cypress/reports/mochawesome/mochawesome.html  # Attach the MochaAwesome report file
