@@ -3,15 +3,13 @@ const { defineConfig } = require("cypress");
 module.exports = defineConfig({
   e2e: {
     setupNodeEvents(on, config) {
-      // implement node event listeners her
+      // implement node event listeners here
     },
     specPattern: 'cypress/integration/**/*spec.js',
   },
-  reporter: 'mochawesome',
+  reporter: 'junit',  // Changed the reporter to 'junit'
   reporterOptions: {
-    reportDir: 'cypress/reports',
-    overwrite: false,
-    html: false,
-    json: true,
+    mochaFile: 'cypress/reports/junit/results-[hash].xml',  // Save report files as XML in the specified directory
+    toConsole: true,  // Optional: Log test results to the console
   },
 });

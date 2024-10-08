@@ -35,54 +35,26 @@ jobs:
       - name: Ensure Cypress binary permissions
         run: chmod +x ~/.cache/Cypress/13.15.0/Cypress/Cypress
 
-      - name: Install Cypress with elevated permissions
+      - name: Install Cypress
         run: sudo npx cypress install
 
       - name: Create reports directory
         run: mkdir -p cypress/reports  
 
-      - name: Run Cypress tests with XVFB
+      - name: Run Cypress tests
         run: |
           sudo apt-get install -y xvfb
           xvfb-run --auto-servernum --server-args="-screen 0 1280x1024x24" npx cypress run || true
 
-      - name: Check for mochawesome reports
+      - name: Check for JUnit reports
         run: |
-          echo "Checking for report files..."
-          ls -l cypress/reports/  # Lists the reports for debugging
-          if ls cypress/reports/*.json 1> /dev/null 2>&1; then
-            echo "JSON report files found:"
-            ls -l cypress/reports/*.json
-            cat cypress/reports/*.json  # Print contents of report files
+          echo "Checking for JUnit report files..."
+          if ls cypress/reports/junit/*.xml 1> /dev/null 2>&1; then
+            echo "JUnit report files found:"
+            ls -l cypress/reports/junit/*.xml
           else
-            echo "No JSON reports found."
+            echo "No JUnit reports found."
             exit 0
-          fi
-
-      - name: Merge Cypress test results
-        run: |
-          echo "Merging reports..."
-          if [ -n "$(ls -A cypress/reports/*.json 2>/dev/null)" ]; then
-            npx mochawesome-merge cypress/reports/*.json > cypress/reports/mochawesome.json || true
-            if [ -s cypress/reports/mochawesome.json ]; then
-              echo "Merging successful."
-              npx marge cypress/reports/mochawesome.json --reportDir cypress/reports --inline
-            else
-              echo "Merged report is empty or failed to generate."
-              exit 1
-            fi
-          else
-            echo "No JSON reports found to merge."
-            exit 0
-          fi
-
-      - name: Check for attachment
-        run: |
-          if [ -f cypress/reports/mochawesome.html ]; then
-            echo "Attachment found."
-          else
-            echo "Attachment not found."
-            exit 1
           fi
 
       - name: Send email notification
@@ -93,7 +65,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Cypress Test Report for ${{ github.repository }}
+          subject: Cypress JUnit Test Report for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
           to: |
             oluwashola.olagbemisoye@mtn.com, 
@@ -101,4 +73,4 @@ jobs:
             olushola@ebsafr.com, 
             olawunmitolulope6@gmail.com
           from: shola.mich.7438@gmail.com
-          attachments: cypress/reports/mochawesome.html
+          attachments: cypress/reports/junit/results-[hash].xml
