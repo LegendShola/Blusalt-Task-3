@@ -6,10 +6,14 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     specPattern: 'cypress/integration/**/*spec.js',
+    baseUrl: 'https://demo.opencart.com',
+    requestTimeout: 60000,  // Increase the request timeout to 60 seconds
+    responseTimeout: 60000, // Increase the response timeout to 60 seconds
+    pageLoadTimeout: 120000, // Increase page load timeout to 120 seconds
   },
-  reporter: 'junit',  // Changed the reporter to 'junit'
+  reporter: 'junit',  // Using JUnit reporter for CI reporting
   reporterOptions: {
-    mochaFile: 'cypress/reports/junit/results-[hash].xml',  // Save report files as XML in the specified directory
-    toConsole: true,  // Optional: Log test results to the console
+    mochaFile: 'cypress/reports/junit/results-[hash].xml',
+    toConsole: true,
   },
 });
