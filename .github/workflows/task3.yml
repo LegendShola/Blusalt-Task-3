@@ -32,7 +32,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Ensuring that the Cypress binary directory has execution permissions
       - name: Ensure Cypress binary permissions
         run: chmod +x ~/.cache/Cypress/13.15.0/Cypress/Cypress
 
@@ -42,16 +41,15 @@ jobs:
       - name: Create reports directory
         run: mkdir -p cypress/reports  
 
-      # Use xvfb to enable a headless GUI for Cypress tests
       - name: Run Cypress tests with XVFB
         run: |
           sudo apt-get install -y xvfb
           xvfb-run --auto-servernum --server-args="-screen 0 1280x1024x24" npx cypress run || true
 
-      # Check for mochawesome reports
       - name: Check for mochawesome reports
         run: |
           echo "Checking for report files..."
+          ls -l cypress/reports/  # Lists the reports for debugging
           if ls cypress/reports/*.json 1> /dev/null 2>&1; then
             echo "JSON report files found:"
             ls -l cypress/reports/*.json
@@ -61,7 +59,6 @@ jobs:
             exit 0
           fi
 
-      # Merge test results into one report using mochawesome-merge
       - name: Merge Cypress test results
         run: |
           echo "Merging reports..."
@@ -79,7 +76,6 @@ jobs:
             exit 0
           fi
 
-      # Verify attachment exists
       - name: Check for attachment
         run: |
           if [ -f cypress/reports/mochawesome.html ]; then
@@ -89,7 +85,6 @@ jobs:
             exit 1
           fi
 
-      # Send email with test report
       - name: Send email notification
         if: always()
         uses: dawidd6/action-send-mail@v3
@@ -105,5 +100,5 @@ jobs:
             shola.olagbemisoye@wemabank.com, 
             olushola@ebsafr.com, 
             olawunmitolulope6@gmail.com
-          from: shola.mich.7438@gmail.com   # Change this to the sender email
+          from: shola.mich.7438@gmail.com
           attachments: cypress/reports/mochawesome.html
