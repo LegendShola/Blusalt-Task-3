@@ -74,10 +74,7 @@ jobs:
           password: ${{ secrets.EMAIL_PASSWORD }}
           subject: Cypress Test Report(MochaAwesome) for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
-          to: |
-            oluwashola.olagbemisoye@mtn.com, 
-            shola.olagbemisoye@wemabank.com, 
-            olushola@ebsafr.com, 
+          to: | 
             olawunmitolulope6@gmail.com
           from: shola.mich.7438@gmail.com
           attachments: cypress/reports/mochawesome/mochawesome.html  # Attach MochaAwesome report
@@ -93,9 +90,6 @@ jobs:
           subject: Cypress Test Report(Allure) for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
           to: |
-            oluwashola.olagbemisoye@mtn.com, 
-            shola.olagbemisoye@wemabank.com, 
-            olushola@ebsafr.com, 
             olawunmitolulope6@gmail.com
           from: shola.mich.7438@gmail.com
           attachments: allure-report/index.html  # Attach Allure report
