@@ -69,6 +69,9 @@ jobs:
           name: allure-report
           path: allure-report.zip
 
+      - name: Upload Allure report to Google Drive (mock step)
+        run: echo "Mock upload step. Implement your Google Drive API upload logic here."
+
       - name: Send email notification with MochaAwesome report
         if: always()
         uses: dawidd6/action-send-mail@v3
@@ -77,7 +80,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Cypress Test Report(MochaAwesome) for ${{ github.repository }}
+          subject: Cypress Test Report (MochaAwesome) for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
           to: |
             oluwashola.olagbemisoye@mtn.com, 
@@ -95,8 +98,10 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Cypress Test Report(Allure) for ${{ github.repository }}
-          body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
+          subject: Cypress Test Report (Allure) for ${{ github.repository }}
+          body: |
+            The Cypress test run for ${{ github.repository }} has completed. 
+            You can download the Allure report from the following link: [Allure Report](https://drive.google.com/drive/u/0/folders/13g51kgDlOpDDHDNxZHW8ZJmttJHwux9n).
           to: |
             oluwashola.olagbemisoye@mtn.com, 
             shola.olagbemisoye@wemabank.com, 
