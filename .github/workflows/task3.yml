@@ -58,10 +58,12 @@ jobs:
             exit 0
           fi
 
-      - name: Archive Allure Results
+      - name: Zip Allure Report
         run: |
           npx allure generate allure-results --clean
           zip -r allure-report.zip allure-report
+
+      - name: Archive Allure Results
         uses: actions/upload-artifact@v3
         with:
           name: allure-report
