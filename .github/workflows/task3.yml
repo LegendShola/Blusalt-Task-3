@@ -1,4 +1,4 @@
-name: Cypress API Test Automation
+name: Cypress Tests and API Test Automation
 
 on:
   push:
@@ -11,10 +11,14 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2] # Uses 2 parallel instances
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -72,9 +76,9 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Cypress Test Report(MochaAwesome) for ${{ github.repository }}
+          subject: Cypress Test Report (MochaAwesome) for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
-          to: | 
+          to: |
             olawunmitolulope6@gmail.com
           from: shola.mich.7438@gmail.com
           attachments: cypress/reports/mochawesome/mochawesome.html  # Attach MochaAwesome report
@@ -87,9 +91,21 @@ jobs:
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
           password: ${{ secrets.EMAIL_PASSWORD }}
-          subject: Cypress Test Report(Allure) for ${{ github.repository }}
+          subject: Cypress Test Report (Allure) for ${{ github.repository }}
           body: "The Cypress test run for ${{ github.repository }} has completed. Check the attached report for detailed results."
           to: |
             olawunmitolulope6@gmail.com
           from: shola.mich.7438@gmail.com
           attachments: allure-report/index.html  # Attach Allure report
+
+      - name: Cypress run
+        # Uses the official Cypress GitHub action
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm start  # Starts web server for E2E tests
+          wait-on: 'http://localhost:3000'  # Waits for above
+          record: true
+          parallel: true  # Runs tests in parallel using settings above
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}  # Set in GitHub repo secrets
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
