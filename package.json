@@ -7,7 +7,7 @@
     "cypress:open": "cypress open",
     "test": "cypress run --reporter mochawesome --reporter-options reportDir=cypress/results,overwrite=false,html=false,json=true",
     "merge:reports": "mochawesome-merge cypress/results/*.json > mochawesome.json && mochawesome-report-generator mochawesome.json",
-    "start": "index.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
