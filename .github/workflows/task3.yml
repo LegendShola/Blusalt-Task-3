@@ -14,19 +14,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2] # Uses 2 parallel instances
+        containers: [1, 2]  # Uses 2 parallel instances
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Updated to v4 for compatibility
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '20'  # Updated to Node.js 20 for compatibility
 
       - name: Cache Cypress binary
-        uses: actions/cache@v3
+        uses: actions/cache@v4  # Updated to v4 for compatibility
         with:
           path: ~/.cache/Cypress
           key: ${{ runner.os }}-cypress-${{ hashFiles('package-lock.json') }}
@@ -63,7 +63,7 @@ jobs:
           fi
 
       - name: Archive Allure Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # Updated to v4 for compatibility
         with:
           name: allure-results
           path: allure-report
