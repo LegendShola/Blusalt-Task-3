@@ -11,11 +11,6 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        containers: [1, 2]  # Uses 2 parallel instances
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4  # Updated to v4 for compatibility
@@ -75,7 +70,6 @@ jobs:
           start: npm start  # Starts web server for E2E tests
           wait-on: 'http://localhost:3000'  # Waits for above
           record: true
-          parallel: true  # Runs tests in parallel using settings above
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}  # Set in GitHub repo secrets
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
