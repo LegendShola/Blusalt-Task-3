@@ -11,7 +11,7 @@ describe('API Testing for Registration and Login', () => {
   it('TC01 - Verify user registration with valid details', () => {
     const firstName = 'Jane';
     const lastName = 'Doe';
-    const email = `jane.doe+${Date.now()}@example.com`; // Unique email
+    const email = 'jane.doe+${Date.now()}@example.com'; // Unique email
     const password = 'SecurePassword123!';
     AuthPage.register(firstName, lastName, email, password)
     .then((response) => {
